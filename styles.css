@@ -136,14 +136,16 @@ body {
   text-shadow: 0 0 12px rgba(255, 194, 61, 0.6);
 }
 
-/* ===== Countdown — vibrant, opaque panels so content pops ===== */
+/* ===== Countdown — boxless, huge glowing numbers ===== */
 .countdown {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: clamp(0.5rem, 1.5vw, 1.15rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(0.4rem, 1.4vw, 1.1rem);
   margin: clamp(0.9rem, 3vh, 1.9rem) auto clamp(0.7rem, 2.5vh, 1.5rem);
-  max-width: 740px;
+  max-width: 880px;
   animation: fadeUp 1s 0.2s cubic-bezier(.2,.8,.2,1) both;
+  flex-wrap: nowrap;
 }
 
 .time-unit {
@@ -151,54 +153,65 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: clamp(0.7rem, 2.2vh, 1.75rem) 0.55rem;
-  border-radius: 22px;
-  /* More opaque so numbers read as bright, not muddy */
-  background:
-    linear-gradient(180deg, rgba(58, 16, 90, 0.78), rgba(26, 7, 38, 0.85));
-  border: 1px solid rgba(255, 194, 61, 0.35);
-  box-shadow:
-    0 14px 40px rgba(0, 0, 0, 0.45),
-    0 0 30px rgba(255, 31, 111, 0.28),
-    inset 0 1px 0 rgba(255, 255, 255, 0.16);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-.time-unit:hover {
-  transform: translateY(-5px);
-  border-color: rgba(255, 194, 61, 0.7);
-  box-shadow:
-    0 20px 48px rgba(0, 0, 0, 0.5),
-    0 0 44px rgba(255, 31, 111, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  /* No box — just the number */
+  padding: 0 0.2rem;
 }
 
 .time-value {
   font-family: 'Pricedown', 'Inter', sans-serif;
-  font-size: clamp(2rem, min(9.5vw, 11vh), 5.2rem);
+  font-size: clamp(3rem, min(13vw, 16vh), 8.5rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 0.9;
   font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  /* Solid bright gradient + heavy glow so it never reads muddy */
+  letter-spacing: 0.01em;
+  /* Bright white→gold→orange gradient */
   background: linear-gradient(180deg, #ffffff 0%, #ffe089 45%, var(--orange) 100%);
   -webkit-background-clip: text;
           background-clip: text;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 14px rgba(255, 194, 61, 0.65))
-          drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+  /* Heavy neon glow so numbers pop off the backdrop */
+  filter: drop-shadow(0 0 18px rgba(255, 194, 61, 0.7))
+          drop-shadow(0 0 38px rgba(255, 31, 111, 0.45))
+          drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+  animation: none;
+}
+/* Subtle tick pulse when the value updates */
+.time-value.tick {
+  animation: tick 0.4s ease-out;
+}
+@keyframes tick {
+  0%   { filter: drop-shadow(0 0 28px rgba(255, 255, 255, 0.9)) drop-shadow(0 0 50px rgba(255, 31, 111, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); }
+  100% { filter: drop-shadow(0 0 18px rgba(255, 194, 61, 0.7)) drop-shadow(0 0 38px rgba(255, 31, 111, 0.45)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)); }
 }
 
 .time-label {
-  font-size: clamp(0.66rem, 1.6vw, 0.82rem);
-  letter-spacing: 0.32em;
+  font-size: clamp(0.62rem, 1.5vw, 0.82rem);
+  letter-spacing: 0.36em;
   text-transform: uppercase;
   color: var(--cream);
-  margin-top: 0.65rem;
+  margin-top: clamp(0.4rem, 1.2vh, 0.8rem);
   font-weight: 700;
-  opacity: 0.92;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  opacity: 0.85;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Glowing colons between units */
+.time-sep {
+  font-family: 'Pricedown', 'Inter', sans-serif;
+  font-size: clamp(2rem, min(9vw, 11vh), 5.5rem);
+  font-weight: 900;
+  line-height: 0.9;
+  color: var(--hot-pink);
+  align-self: center;
+  /* Push down so the colon sits between numbers, not labels */
+  transform: translateY(-0.35em);
+  text-shadow: 0 0 16px rgba(255, 31, 111, 0.8);
+  animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0.18; }
 }
 
 .released { margin: 1.25rem 0 0.5rem; }

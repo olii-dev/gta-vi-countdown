@@ -12,6 +12,19 @@ const el = {
 const pad = (n) => String(n).padStart(2, '0');
 const pad3 = (n) => String(n).padStart(3, '0');
 
+// Track previous values so we only flash the units that actually changed
+let prev = { days: null, hours: null, minutes: null, seconds: null };
+
+function setUnit(unit, value) {
+  if (prev[unit] === value) return; // no change, no flash
+  el[unit].textContent = value;
+  prev[unit] = value;
+  // Re-trigger the tick pulse animation
+  el[unit].classList.remove('tick');
+  void el[unit].offsetWidth; // force reflow
+  el[unit].classList.add('tick');
+}
+
 function tick() {
   const now = Date.now();
   const diff = RELEASE_DATE - now;
@@ -26,10 +39,10 @@ function tick() {
   const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  el.days.textContent    = pad3(days);
-  el.hours.textContent   = pad(hours);
-  el.minutes.textContent = pad(minutes);
-  el.seconds.textContent = pad(seconds);
+  setUnit('days',    pad3(days));
+  setUnit('hours',   pad(hours));
+  setUnit('minutes', pad(minutes));
+  setUnit('seconds', pad(seconds));
 }
 
 function showReleased() {
