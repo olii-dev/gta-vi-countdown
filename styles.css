@@ -1,0 +1,380 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --pink: #ff3d81;
+  --hot-pink: #ff1f6f;
+  --magenta: #d6248e;
+  --purple: #6a1b9a;
+  --violet: #3d1a78;
+  --orange: #ff7a3d;
+  --gold: #ffc23d;
+  --cream: #fff4dd;
+  --ink: #120726;
+}
+
+html, body { height: 100%; }
+
+html, body {
+  /* Lock the viewport — no scrolling */
+  overflow: hidden;
+  /* Disable text selection / highlighting */
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: var(--ink);
+  color: #fff;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ===== Backdrop: push toward vibrant Vice City palette ===== */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  overflow: hidden;
+  background: linear-gradient(180deg, #2a0a4e 0%, #6a1b7a 35%, #c2185b 62%, #ff5a1f 88%, #ffb830 100%);
+}
+.backdrop-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 35%;
+  /* Saturate + push warm so the photo reads as Vice City, not muddy */
+  filter: saturate(1.45) contrast(1.08) brightness(1.02) hue-rotate(-6deg);
+  mix-blend-mode: luminosity;
+  opacity: 0.92;
+}
+
+/* Vibrant sunset tint OVER the photo (replaces the muddy dark overlay) */
+.backdrop-gradient {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      rgba(61, 26, 120, 0.55) 0%,
+      rgba(194, 24, 91, 0.25) 38%,
+      rgba(255, 90, 31, 0.18) 70%,
+      rgba(255, 184, 48, 0.28) 100%);
+  mix-blend-mode: screen;
+}
+/* Legibility vignette — only edges, keeps center vibrant */
+.backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(18, 7, 38, 0.55) 0%, transparent 22%, transparent 78%, rgba(18, 7, 38, 0.6) 100%);
+  pointer-events: none;
+}
+
+.grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.06;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ===== Container ===== */
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 920px;
+  /* Scale with viewport height so content always fits */
+  padding: clamp(0.8rem, 2.5vh, 2.5rem) 1.5rem;
+  text-align: center;
+}
+
+.hero {
+  margin-bottom: clamp(0.6rem, 1.8vh, 1rem);
+  animation: fadeUp 1s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.vi-logo {
+  width: min(540px, 76vw, 42vh);
+  height: auto;
+  margin: 0 auto 0.15rem;
+  display: block;
+  filter: drop-shadow(0 10px 32px rgba(255, 31, 111, 0.55))
+          drop-shadow(0 0 60px rgba(255, 122, 61, 0.4))
+          drop-shadow(0 0 10px rgba(255, 255, 255, 0.18));
+}
+
+.release-date {
+  font-size: clamp(0.9rem, 2.2vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.6rem 0 0;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 194, 61, 0.55);
+  color: var(--cream);
+  box-shadow: 0 4px 18px rgba(255, 31, 111, 0.25);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.release-date strong {
+  color: var(--gold);
+  font-weight: 800;
+  text-shadow: 0 0 12px rgba(255, 194, 61, 0.6);
+}
+
+/* ===== Countdown — vibrant, opaque panels so content pops ===== */
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(0.5rem, 1.5vw, 1.15rem);
+  margin: clamp(0.9rem, 3vh, 1.9rem) auto clamp(0.7rem, 2.5vh, 1.5rem);
+  max-width: 740px;
+  animation: fadeUp 1s 0.2s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.time-unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.7rem, 2.2vh, 1.75rem) 0.55rem;
+  border-radius: 22px;
+  /* More opaque so numbers read as bright, not muddy */
+  background:
+    linear-gradient(180deg, rgba(58, 16, 90, 0.78), rgba(26, 7, 38, 0.85));
+  border: 1px solid rgba(255, 194, 61, 0.35);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.45),
+    0 0 30px rgba(255, 31, 111, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.time-unit:hover {
+  transform: translateY(-5px);
+  border-color: rgba(255, 194, 61, 0.7);
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.5),
+    0 0 44px rgba(255, 31, 111, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.time-value {
+  font-family: 'Pricedown', 'Inter', sans-serif;
+  font-size: clamp(2rem, min(9.5vw, 11vh), 5.2rem);
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+  /* Solid bright gradient + heavy glow so it never reads muddy */
+  background: linear-gradient(180deg, #ffffff 0%, #ffe089 45%, var(--orange) 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 14px rgba(255, 194, 61, 0.65))
+          drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
+}
+
+.time-label {
+  font-size: clamp(0.66rem, 1.6vw, 0.82rem);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--cream);
+  margin-top: 0.65rem;
+  font-weight: 700;
+  opacity: 0.92;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.released { margin: 1.25rem 0 0.5rem; }
+.released .drop-text {
+  font-family: 'Pricedown', sans-serif;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  background: linear-gradient(90deg, var(--pink), var(--gold), var(--orange));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer 2.5s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+.hidden { display: none !important; }
+
+/* ===== CTA ===== */
+.cta {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: clamp(0.5rem, 1.5vh, 1rem);
+  animation: fadeUp 1s 0.6s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.btn {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: clamp(0.7rem, 1.8vh, 1rem) clamp(1.6rem, 4vw, 2.4rem);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  min-width: 180px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+}
+
+/* ===== Trailer buttons ===== */
+.btn-trailer {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: clamp(0.7rem, 1.9vh, 0.95rem) clamp(1.2rem, 3vw, 1.6rem) clamp(0.7rem, 1.9vh, 0.95rem) clamp(0.9rem, 2.4vw, 1.2rem);
+  border-radius: 16px;
+  border: 1.5px solid rgba(255, 194, 61, 0.4);
+  background: linear-gradient(135deg, rgba(255, 31, 111, 0.22), rgba(106, 27, 154, 0.32));
+  color: #fff;
+  text-decoration: none;
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(255, 31, 111, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+  text-transform: none;
+  min-width: 0;
+}
+/* Shine sweep on hover */
+.btn-trailer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+  transform: skewX(-18deg);
+  transition: left 0.6s ease;
+}
+.btn-trailer:hover {
+  transform: translateY(-3px);
+  border-color: var(--gold);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.45),
+    0 0 36px rgba(255, 31, 111, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+.btn-trailer:hover::before { left: 140%; }
+
+.play-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(30px, 4vw, 38px);
+  height: clamp(30px, 4vw, 38px);
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--hot-pink), var(--orange));
+  box-shadow: 0 0 14px rgba(255, 31, 111, 0.7);
+  transition: transform 0.2s ease;
+}
+.play-icon svg {
+  width: 52%;
+  height: 52%;
+  margin-left: 2px;
+  fill: #fff;
+}
+.btn-trailer:hover .play-icon { transform: scale(1.1); }
+
+.btn-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.15;
+}
+.btn-title {
+  font-family: 'Pricedown', 'Inter', sans-serif;
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  background: linear-gradient(180deg, #fff, var(--gold));
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+.btn-sub {
+  font-size: clamp(0.6rem, 1.5vw, 0.72rem);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 244, 221, 0.78);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--hot-pink), var(--magenta) 55%, var(--purple));
+  color: #fff;
+  box-shadow: 0 6px 24px rgba(255, 31, 111, 0.55);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 34px rgba(255, 31, 111, 0.75);
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cream);
+  border-color: rgba(255, 194, 61, 0.55);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+.btn-ghost:hover {
+  background: rgba(255, 194, 61, 0.16);
+  border-color: var(--gold);
+  transform: translateY(-3px);
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 560px) {
+  .container { padding: 1.75rem 1rem 1.25rem; }
+  .hero { margin-bottom: 1rem; }
+  .countdown { margin-top: 1.25rem; grid-template-columns: repeat(2, 1fr); }
+  .btn { min-width: 0; width: min(100%, 280px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition: none !important;
+  }
+}

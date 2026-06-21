@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GTA VI — Countdown to November 19, 2026</title>
+  <meta name="description" content="Countdown to the release of Grand Theft Auto VI. Coming November 19, 2026 to PlayStation 5 and Xbox Series X|S." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Pricedown&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="backdrop" aria-hidden="true">
+    <img src="assets/view.avif" alt="" class="backdrop-img" />
+    <div class="backdrop-gradient"></div>
+    <div class="grain"></div>
+  </div>
+
+  <main class="container">
+    <header class="hero">
+      <img src="assets/vi-logo.png" alt="Grand Theft Auto VI" class="vi-logo" />
+
+      <p class="release-date">Releases <strong>November 19, 2026</strong></p>
+    </header>
+
+    <section class="countdown" aria-label="Countdown to release">
+      <div class="time-unit">
+        <span class="time-value" id="days">000</span>
+        <span class="time-label">Days</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-value" id="hours">00</span>
+        <span class="time-label">Hours</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-value" id="minutes">00</span>
+        <span class="time-label">Minutes</span>
+      </div>
+      <div class="time-unit">
+        <span class="time-value" id="seconds">00</span>
+        <span class="time-label">Seconds</span>
+      </div>
+    </section>
+
+    <div id="released" class="released hidden">
+      <h2 class="drop-text">VI is LIVE</h2>
+      <p>Welcome back to Vice City.</p>
+    </div>
+
+    <section class="cta">
+      <a href="https://www.youtube.com/watch?v=QdBZY2fkU-0" target="_blank" rel="noopener" class="btn btn-trailer">
+        <span class="play-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="btn-stack">
+          <span class="btn-title">Trailer 1</span>
+          <span class="btn-sub">Official Reveal</span>
+        </span>
+      </a>
+      <a href="https://www.youtube.com/watch?v=VQRLujxTm3c" target="_blank" rel="noopener" class="btn btn-trailer">
+        <span class="play-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        </span>
+        <span class="btn-stack">
+          <span class="btn-title">Trailer 2</span>
+          <span class="btn-sub">Jason &amp; Lucia</span>
+        </span>
+      </a>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
